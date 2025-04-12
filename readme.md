@@ -1,217 +1,256 @@
-# Spring PetClinic Sample Application [![Build Status](https://travis-ci.org/spring-projects/spring-petclinic.png?branch=master)](https://travis-ci.org/spring-projects/spring-petclinic/)
+## 🏥 Spring PetClinic — DevOps Pro Edition
 
-## Understanding the Spring Petclinic application with a few diagrams
-<a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.13-brightgreen.svg)
+![Java](https://img.shields.io/badge/Java-17-orange.svg)
+![Build](https://img.shields.io/badge/Build-Maven-blue)
+![License](https://img.shields.io/badge/license-Apache%202.0-lightgrey.svg)
 
-## Running petclinic locally
+### ✨ Demo URL
+👉 [`http://localhost:9966/petclinic`](http://localhost:9966/petclinic)
+
+---
+
+## 📌 Table of Contents
+- [About](#about)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Screenshots](#screenshots)
+- [Getting Started](#getting-started)
+- [Database Configuration](#database-configuration)
+- [Run with Docker](#run-with-docker)
+- [CI/CD Pipeline](#cicd-pipeline)
+- [Project Structure](#project-structure)
+- [Branches](#branches)
+- [Contributors](#contributors)
+- [License](#license)
+
+---
+
+## 🧾p About
+
+**Spring PetClinic** is a sample **Spring Boot** web application built for learning the **Spring ecosystem** and showcasing real-world DevOps workflows.
+
+This version is DevOps-optimized for CI/CD pipelines, Docker deployment, and infrastructure-as-code practices.
+
+---
+
+## 🛠 Tech Stack
+
+| Layer         | Technology                      |
+|--------------|----------------------------------|
+| Language      | Java 17                          |
+| Framework     | Spring Boot 2.7.13               |
+| Web           | Spring MVC, JSP                  |
+| Persistence   | Spring Data JPA, Hibernate       |
+| Database      | HSQLDB / MySQL                   |
+| Build Tool    | Maven                            |
+| DevOps Tools  | Docker, Jenkins, GitHub Actions  |
+| Testing       | JUnit, Mockito                   |
+
+---
+
+## 🏗 Architecture
+
+```text
+Browser
+   ↓
+Spring MVC (Controller)
+   ↓
+Service Layer (ClinicService)
+   ↓
+Repository Layer (Spring Data JPA)
+   ↓
+Database (HSQLDB / MySQL)
 ```
-	git clone https://github.com/spring-projects/spring-petclinic.git
-	cd spring-petclinic
-	./mvnw tomcat7:run
+
+---
+
+## 🗼 Screenshots
+
+> Add your own screenshots later
+
+![Home Page](https://github.com/spring-projects/spring-petclinic/blob/main/docs/images/petclinic-home.png)
+![Owners List](https://github.com/spring-projects/spring-petclinic/blob/main/docs/images/petclinic-owners.png)
+
+---
+
+## 🚀 Getting Started
+
+### 📦 Clone & Build
+
+```bash
+git clone https://github.com/DevOpsLearrnn/PetMate
+cd spring-petclinic
+./mvnw clean install
 ```
 
-You can then access petclinic here: http://localhost:9966/petclinic/
+### ▶️ Run the App
 
-## In case you find a bug/suggested improvement for Spring Petclinic
-Our issue tracker is available here: https://github.com/spring-projects/spring-petclinic/issues
-
-
-## Database configuration
-
-In its default configuration, Petclinic uses an in-memory database (HSQLDB) which
-gets populated at startup with data. A similar setup is provided for MySql in case a persistent database configuration is needed.
-Note that whenever the database type is changed, the data-access.properties file needs to be updated and the mysql-connector-java artifact from the pom.xml needs to be uncommented.
-
-You may start a MySql database with docker:
-
-```
-docker run -e MYSQL_ROOT_PASSWORD=petclinic -e MYSQL_DATABASE=petclinic -p 3306:3306 mysql:5.7.8
+```bash
+./mvnw spring-boot:run
 ```
 
-## Working with Petclinic in Eclipse/STS
+Access: `http://localhost:9966/petclinic`
 
-### prerequisites
-The following items should be installed in your system:
-* Maven 3 (http://www.sonatype.com/books/mvnref-book/reference/installation.html)
-* git command line tool (https://help.github.com/articles/set-up-git)
-* Eclipse with the m2e plugin (m2e is installed by default when using the STS (http://www.springsource.org/sts) distribution of Eclipse)
+---
 
-Note: when m2e is available, there is an m2 icon in Help -> About dialog.
-If m2e is not there, just follow the install process here: http://eclipse.org/m2e/download/
+## 💢 Database Configuration
 
+### 🧠 In-Memory HSQLDB (Default)
+- Automatically runs on app startup.
+- No configuration needed.
 
-### Steps:
+### 🐬 MySQL (Optional)
 
-1) In the command line
-```
-git clone https://github.com/spring-projects/spring-petclinic.git
-```
-2) Inside Eclipse
-```
-File -> Import -> Maven -> Existing Maven project
+```bash
+docker run -e MYSQL_ROOT_PASSWORD=petclinic \
+           -e MYSQL_DATABASE=petclinic \
+           -p 3306:3306 mysql:5.7
 ```
 
+#### Update `application.properties`:
 
-## Looking for something in particular?
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/petclinic
+spring.datasource.username=root
+spring.datasource.password=petclinic
+spring.jpa.hibernate.ddl-auto=update
+```
 
-<table>
-  <tr>
-    <th width="300px">Java Config</th><th width="300px"></th>
-  </tr>
-  <tr>
-    <td>Java Config branch</td>
-    <td>
-      Petclinic uses XML configuration by default. In case you'd like to use Java Config instead, there is a Java Config branch available <a href="https://github.com/spring-projects/spring-petclinic/tree/javaconfig">here</a>. Thanks to Antoine Rey for his contribution.     
-    </td>
-  </tr>
-  <tr>
-    <th width="300px">Inside the 'Web' layer</th><th width="300px">Files</th>
-  </tr>
-  <tr>
-    <td>Spring MVC - XML integration</td>
-    <td><a href="/src/main/resources/spring/mvc-view-config.xml">mvc-view-config.xml</a></td>
-  </tr>
-  <tr>
-    <td>Spring MVC - ContentNegotiatingViewResolver</td>
-    <td><a href="/src/main/resources/spring/mvc-view-config.xml">mvc-view-config.xml</a></td>
-  </tr>
-  <tr>
-    <td>JSP custom tags</td>
-    <td>
-      <a href="/src/main/webapp/WEB-INF/tags">WEB-INF/tags</a>
-      <a href="/src/main/webapp/WEB-INF/jsp/owners/createOrUpdateOwnerForm.jsp">createOrUpdateOwnerForm.jsp</a></td>
-  </tr>
-  <tr>
-    <td>Bower</td>
-    <td>
-      <a href="/pom.xml">bower-install maven profile declaration inside pom.xml</a> <br />
-      <a href="/bower.json">JavaScript libraries are defined by the manifest file bower.json</a> <br />
-      <a href="/.bowerrc">Bower configuration using JSON</a> <br />
-      <a href="/src/main/resources/spring/mvc-core-config.xml#L30">Resource mapping in Spring configuration</a> <br />
-      <a href="/src/main/webapp/WEB-INF/jsp/fragments/staticFiles.jsp#L12">sample usage in JSP</a></td>
-    </td>
-  </tr>
-  <tr>
-    <td>Dandelion-datatables</td>
-    <td>
-      <a href="/src/main/webapp/WEB-INF/jsp/owners/ownersList.jsp">ownersList.jsp</a> 
-      <a href="/src/main/webapp/WEB-INF/jsp/vets/vetList.jsp">vetList.jsp</a> 
-      <a href="/src/main/webapp/WEB-INF/web.xml">web.xml</a> 
-      <a href="/src/main/resources/dandelion/datatables/datatables.properties">datatables.properties</a> 
-   </td>
-  </tr>
-  <tr>
-    <td>Thymeleaf branch</td>
-    <td>
-      <a href="http://www.thymeleaf.org/petclinic.html">See here</a></td>
-  </tr>
-  <tr>
-    <td>Branch using GemFire and Spring Data GemFire instead of ehcache (thanks Bijoy Choudhury)</td>
-    <td>
-      <a href="https://github.com/bijoych/spring-petclinic-gemfire">See here</a></td>
-  </tr>
-</table>
+---
 
-<table>
-  <tr>
-    <th width="300px">'Service' and 'Repository' layers</th><th width="300px">Files</th>
-  </tr>
-  <tr>
-    <td>Transactions</td>
-    <td>
-      <a href="/src/main/resources/spring/business-config.xml">business-config.xml</a>
-       <a href="/src/main/java/org/springframework/samples/petclinic/service/ClinicServiceImpl.java">ClinicServiceImpl.java</a>
-    </td>
-  </tr>
-  <tr>
-    <td>Cache</td>
-      <td>
-      <a href="/src/main/resources/spring/tools-config.xml">tools-config.xml</a>
-       <a href="/src/main/java/org/springframework/samples/petclinic/service/ClinicServiceImpl.java">ClinicServiceImpl.java</a>
-    </td>
-  </tr>
-  <tr>
-    <td>Bean Profiles</td>
-      <td>
-      <a href="/src/main/resources/spring/business-config.xml">business-config.xml</a>
-       <a href="/src/test/java/org/springframework/samples/petclinic/service/ClinicServiceJdbcTests.java">ClinicServiceJdbcTests.java</a>
-       <a href="/src/main/webapp/WEB-INF/web.xml">web.xml</a>
-    </td>
-  </tr>
-  <tr>
-    <td>JdbcTemplate</td>
-    <td>
-      <a href="/src/main/resources/spring/business-config.xml">business-config.xml</a>
-      <a href="/src/main/java/org/springframework/samples/petclinic/repository/jdbc">jdbc folder</a></td>
-  </tr>
-  <tr>
-    <td>JPA</td>
-    <td>
-      <a href="/src/main/resources/spring/business-config.xml">business-config.xml</a>
-      <a href="/src/main/java/org/springframework/samples/petclinic/repository/jpa">jpa folder</a></td>
-  </tr>
-  <tr>
-    <td>Spring Data JPA</td>
-    <td>
-      <a href="/src/main/resources/spring/business-config.xml">business-config.xml</a>
-      <a href="/src/main/java/org/springframework/samples/petclinic/repository/springdatajpa">springdatajpa folder</a></td>
-  </tr>
-</table>
+## 🐳 Run with Docker
 
-<table>
-  <tr>
-    <th width="300px">Others</th><th width="300px">Files</th>
-  </tr>
-  <tr>
-    <td>Gradle branch</td>
-    <td>
-      <a href="https://github.com/whimet/spring-petclinic">See here</a></td>
-  </tr>
-</table>
+### Step 1: Build the Image
 
+```bash
+docker build -t spring-petclinic .
+```
 
-## Interaction with other open source projects
+### Step 2: Run the Container
 
-One of the best parts about working on the Spring Petclinic application is that we have the opportunity to work in direct contact with many Open Source projects. We found some bugs/suggested improvements on various topics such as Spring, Spring Data, Bean Validation and even Eclipse! In many cases, they've been fixed/implemented in just a few days.
-Here is a list of them:
+```bash
+docker run -d -p 8080:8080 spring-petclinic
+```
 
-<table>
-  <tr>
-    <th width="300px">Name</th>
-    <th width="300px"> Issue </th>
-  </tr>
+Visit: `http://localhost:8080`
 
-  <tr>
-    <td>Spring JDBC: simplify usage of NamedParameterJdbcTemplate</td>
-    <td> <a href="https://jira.springsource.org/browse/SPR-10256"> SPR-10256</a> and <a href="https://jira.springsource.org/browse/SPR-10257"> SPR-10257</a> </td>
-  </tr>
-  <tr>
-    <td>Bean Validation / Hibernate Validator: simplify Maven dependencies and backward compatibility</td>
-    <td>
-      <a href="https://hibernate.atlassian.net/browse/HV-790"> HV-790</a> and <a href="https://hibernate.atlassian.net/browse/HV-792"> HV-792</a>
-      </td>
-  </tr>
-  <tr>
-    <td>Spring Data: provide more flexibility when working with JPQL queries</td>
-    <td>
-      <a href="https://jira.springsource.org/browse/DATAJPA-292"> DATAJPA-292</a>
-      </td>
-  </tr>  
-  <tr>
-    <td>Eclipse: validation bug when working with .tag/.tagx files (has only been fixed for Eclipse 4.3 (Kepler)). <a href="https://github.com/spring-projects/spring-petclinic/issues/14">See here for more details.</a></td>
-    <td>
-      <a href="https://issuetracker.springsource.com/browse/STS-3294"> STS-3294</a>
-    </td>
-  </tr>    
-</table>
+---
 
+## 🔄 CI/CD Pipeline
 
-# Contributing
+### ✅ GitHub Actions
 
-The [issue tracker](https://github.com/spring-projects/spring-petclinic/issues) is the preferred channel for bug reports, features requests and submitting pull requests.
+```yaml
+name: CI Build
 
-For pull requests, editor preferences are available in the [editor config](https://github.com/spring-projects/spring-petclinic/blob/master/.editorconfig) for easy use in common text editors. Read more and download plugins at <http://editorconfig.org>.
+on: [push, pull_request]
 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+      - name: Build with Maven
+        run: ./mvnw clean install
+```
 
+### ✅ Jenkins Pipeline
+
+```groovy
+pipeline {
+    agent any
+    stages {
+        stage('Clone') {
+            steps {
+                git 'https://github.com/DevOpsLearrnn/PetMate'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh './mvnw clean package'
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t spring-petclinic .'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'docker run -d -p 8080:8080 spring-petclinic'
+            }
+        }
+    }
+}
+```
+
+---
+
+## 📂 Project Structure
+
+```text
+📀 src
+🕛   🕛 main
+🕛   ├🕛 java/org/springframework/samples/petclinic
+🕛   ├🕛 resources
+🕛   └🕛 webapp/WEB-INF/jsp
+🕛   test
+pom.xml
+Dockerfile
+```
+
+---
+
+## 🌿 Branches
+
+| Branch         | Description                        |
+|----------------|------------------------------------|
+| `main`         | JSP + Spring Boot default version  |
+| `thymeleaf`    | Using Thymeleaf templates          |
+| `spring-jdbc`  | Using Spring JDBC instead of JPA   |
+| `react`        | React frontend version             |
+
+---
+
+## 👥 Contributors
+
+Made with ❤️ by:
+
+- [Your Name](https://github.com/DevOpsLearrnn/PetMate)
+- [Spring Team](https://github.com/spring-projects)
+
+Want to contribute? [Raise a PR](https://github.com/DevOpsLearrnn/PetMate)
+
+---
+
+## 📄 License
+
+This project is licensed under the **Apache License 2.0**.  
+See [LICENSE](LICENSE) for details.
+
+---
+
+## 🧑‍🤖 FAQ
+
+**Q: Can I deploy this on AWS/GCP/Azure?**  
+Yes, use Docker, ECS, EKS, or App Engine.
+
+**Q: Can I switch to PostgreSQL?**  
+Yes, just change the JDBC URL and dependency.
+
+**Q: Does it support REST APIs?**  
+Yes, with a bit of customization you can expose REST endpoints.
+
+---
+
+## 🧠 Want DevOps Magic?
+
+Need CI/CD, monitoring, or cloud infra setup?  
+> Fork the repo, and start building your DevOps skills now! 🚀
 
 
